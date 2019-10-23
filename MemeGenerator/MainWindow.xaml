@@ -7,54 +7,60 @@
         mc:Ignorable="d"
         Title="Meme Generator" Height="800" Width="800" Icon="128.ico">
     <Window.Resources>
+        <local:CheckBoxConverter x:Key="Convertidor"></local:CheckBoxConverter>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="3"/>
         </Style>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextoMeme">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontFamily" Value="Impact"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect/>
+                    <DropShadowEffect ShadowDepth="4" BlurRadius="5"/>
                 </Setter.Value>
             </Setter>
         </Style>
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Texto superior"/>
-            <TextBox x:Name="TextoSuperiorTextBox" Grid.Row="0" Grid.Column="1" Text="Texto superior"/>
-            <TextBlock Grid.Row="1" Grid.Column="0"  Text="Texto inferior"/>
-            <TextBox x:Name="TextoInferiorTextBox" Grid.Row="1" Grid.Column="1"  Text="Texto inferior"/>
-            <TextBlock Grid.Row="2" Grid.Column="0"  Text="Ancho"/>
-            <Slider x:Name="AnchoSlider" Value="500" Grid.Row="2" Grid.Column="1"  Minimum="100" Maximum="1000"/>
-            <TextBlock Grid.Row="3" Grid.Column="0"  Text="Alto"/>
-            <Slider x:Name="AltoSlider" Value="500" Grid.Row="3" Grid.Column="1"  Minimum="100" Maximum="1000"/>
-            <TextBlock Grid.Row="4" Grid.Column="0"  Text="Imagen"/>
-            <TextBox Grid.Row="4" Grid.Column="1"  Text="" x:Name="ImagenTextBox"/>
-            <TextBlock Grid.Row="5" Grid.Column="0"  Text="Borde"/>
-            <CheckBox x:Name="BordeCheckbox" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Tag="3"/>
-        </Grid>
-        <Border BorderBrush="Black" BorderThickness="{Binding ElementName=BordeCheckbox, Path=IsChecked}"
-                Height="{Binding ElementName=AltoSlider, Path=Value}" Width="{Binding ElementName=AnchoSlider, Path=Value}" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid Background="Aqua">
-                <Image Source="{Binding ElementName=ImagenTextBox, Path=Text}" Stretch="Uniform"/>
-                <TextBlock Text="{Binding ElementName=TextoSuperiorTextBox, Path=Text}" Style="{StaticResource TextoMeme}" VerticalAlignment="Top"/>
-                <TextBlock Text="{Binding ElementName=TextoInferiorTextBox, Path=Text}" Style="{StaticResource TextoMeme}" VerticalAlignment="Bottom"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Texto superior"/>
+                <TextBox x:Name="TextoSuperiorTextBox" Grid.Row="0" Grid.Column="1" Text="Texto superior"/>
+                <TextBlock Grid.Row="1" Grid.Column="0"  Text="Texto inferior"/>
+                <TextBox x:Name="TextoInferiorTextBox" Grid.Row="1" Grid.Column="1"  Text="Texto inferior"/>
+                <TextBlock Grid.Row="2" Grid.Column="0"  Text="Ancho"/>
+                <Slider x:Name="AnchoSlider" Value="500" Grid.Row="2" Grid.Column="1"  Minimum="100" Maximum="1000"/>
+                <TextBlock Grid.Row="3" Grid.Column="0"  Text="Alto"/>
+                <Slider x:Name="AltoSlider" Value="500" Grid.Row="3" Grid.Column="1"  Minimum="100" Maximum="1000"/>
+                <TextBlock Grid.Row="4" Grid.Column="0"  Text="Imagen"/>
+                <TextBox Grid.Row="4" Grid.Column="1"  Text="" x:Name="ImagenTextBox"/>
+                <TextBlock Grid.Row="5" Grid.Column="0"  Text="Borde"/>
+                <CheckBox x:Name="BordeCheckbox" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
             </Grid>
-        </Border>
-    </StackPanel>
+            <Border BorderBrush="Black" BorderThickness="{Binding ElementName=BordeCheckbox, Path=IsChecked, Converter={StaticResource Convertidor}}"
+                Height="{Binding ElementName=AltoSlider, Path=Value}" Width="{Binding ElementName=AnchoSlider, Path=Value}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Background="Aqua">
+                    <Image Source="{Binding ElementName=ImagenTextBox, Path=Text}" Stretch="Fill"/>
+                    <TextBlock Text="{Binding ElementName=TextoSuperiorTextBox, Path=Text}" Style="{StaticResource TextoMeme}" VerticalAlignment="Top"/>
+                    <TextBlock Text="{Binding ElementName=TextoInferiorTextBox, Path=Text}" Style="{StaticResource TextoMeme}" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </Window>
